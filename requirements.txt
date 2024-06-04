@@ -4,3 +4,4 @@ werkzeug==2.0.2
 itsdangerous==2.0.1
 jinja2==3.0.1
 markupsafe==2.0.1
+parsimonious==0.10.0
