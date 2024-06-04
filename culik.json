@@ -1,0 +1,13 @@
+{
+    "auto_get_api_id_api_hash":"off",
+    "auto_move_session_flood":{
+        "mode": "on",
+        "limit_flood_second":"3600"
+    },
+    "proxy": {
+        "mode": "off",
+        "host":"proxy.digitalresistance.dog",
+        "port":443,
+        "secret":"d41d8cd98f00b204e9800998ecf8427e"
+    }
+}

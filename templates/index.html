@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Tools Airdrop Digger Auto Send</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3modal"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #007bff;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label, input, select {
+            margin: 10px 0;
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        .social-media {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .social-media a {
+            display: flex;
+            align-items: center;
+            margin: 0 10px;
+            text-decoration: none;
+            font-size: 0.9em;
+            background-color: #f8f9fa;
+            padding: 5px 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+        }
+        .social-media img {
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+        .box {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e9ecef;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .wallet-options {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        .wallet-options button {
+            margin: 0 10px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #connect-wallet {
+            background-color: #28a745;
+            color: #ffffff;
+        }
+        #import-key {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tools Airdrop Digger Auto Send</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul>
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <div class="wallet-options">
+            <button id="connect-wallet">Connect Wallet</button>
+            <button id="import-key">Import Private Key</button>
+        </div>
+        <form method="POST" action="{{ url_for('send') }}" enctype="multipart/form-data" id="main-form" style="display: none;">
+            <label for="network">Pilih Jaringan:</label>
+            <select name="network" id="network">
+                <option value="1">BSC</option>
+                <option value="2">ETH</option>
+                <option value="3">MATIC</option>
+                <option value="4">ETH BASE</option>
+                <option value="5">Send Token</option>
+            </select><br><br>
+
+            <div id="token_network_section" style="display: none;">
+                <label for="token_network">Pilih Jaringan Token:</label>
+                <select name="token_network" id="token_network">
+                    <option value="1">BSC</option>
+                    <option value="2">ETH</option>
+                    <option value="3">MATIC</option>
+                    <option value="4">ETH BASE</option>
+                </select><br><br>
+            </div>
+
+            <div id="private_key_section" style="display: none;">
+                <label for="private_key">Masukan Private Key:</label>
+                <input type="password" name="private_key" id="private_key"><br><br>
+            </div>
+
+            <div id="wallet_address_section" style="display: none;">
+                <label for="wallet_address">Wallet Address:</label>
+                <input type="text" name="wallet_address" id="wallet_address"><br><br>
+            </div>
+
+            <label for="amount">Jumlah token:</label>
+            <input type="text" name="amount" id="amount" required><br><br>
+
+            <label for="recipients_file">Upload file alamat penerima (addres.txt or addres.csv):</label>
+            <input type="file" name="recipients_file" id="recipients_file" required><br><br>
+
+            <div id="token_section" style="display: none;">
+                <label for="token_contract">Token Contract Address:</label>
+                <input type="text" name="token_contract" id="token_contract"><br><br>
+            </div>
+
+            <input type="submit" value="Send">
+        </form>
+        <div class="box social-media">
+            <a href="https://facebook.com/groups/976906389935257/" target="_blank">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook"> Facebook
+            </a>
+            <a href="https://t.me/airdropdiggerid" target="_blank">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram"> Telegram
+            </a>
+        </div>
+        <div class="box">
+            Powered By <a href="https://t.me/airdropdiggerid">Airdrop Digger</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('network').addEventListener('change', function () {
+            var tokenSection = document.getElementById('token_section');
+            var tokenNetworkSection = document.getElementById('token_network_section');
+            if (this.value == '5') {
+                tokenSection.style.display = 'block';
+                tokenNetworkSection.style.display = 'block';
+            } else {
+                tokenSection.style.display = 'none';
+                tokenNetworkSection.style.display = 'none';
+            }
+        });
+
+        document.getElementById('connect-wallet').addEventListener('click', async function() {
+            try {
+                const providerOptions = {
+                    walletconnect: {
+                        package: WalletConnectProvider,
+                        options: {
+                            infuraId: '59ad23946a7b4d57977e0ebe476348db'
+                        }
+                    }
+                };
+
+                const web3Modal = new Web3Modal({
+                    cacheProvider: false,
+                    providerOptions,
+                    disableInjectedProvider: false,
+                });
+
+                const instance = await web3Modal.connect();
+                const web3 = new Web3(instance);
+
+                const accounts = await web3.eth.getAccounts();
+                const account = accounts[0];
+                
+                document.getElementById('private_key_section').style.display = 'none';
+                document.getElementById('wallet_address_section').style.display = 'block';
+                document.getElementById('wallet_address').value = account;
+                document.getElementById('main-form').style.display = 'block';
+                alert('Wallet connected: ' + account);
+            } catch (error) {
+                console.error('Could not connect to wallet', error);
+            }
+        });
+
+        document.getElementById('import-key').addEventListener('click', function() {
+            document.getElementById('wallet_address_section').style.display = 'none';
+            document.getElementById('private_key_section').style.display = 'block';
+            document.getElementById('main-form').style.display = 'block';
+        });
+
+        // Set random background color
+        document.body.style.backgroundColor = getRandomColor();
+
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+    </script>
+</body>
+</html>
