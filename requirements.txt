@@ -128,7 +128,6 @@ Werkzeug==3.0.3
 wget==3.2
 wsproto==1.2.0
 Flask==2.0.1
-python app.py
 xdis==5.0.13
 xmod==1.8.1
 yarl==1.9.2
