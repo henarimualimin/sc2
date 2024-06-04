@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for, flash
 from web3 import Web3
 import os
-from .utils import select_network, read_recipients_from_file
+from utils import select_network, read_recipients_from_file
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)  # Gantilah dengan secret key yang lebih aman
